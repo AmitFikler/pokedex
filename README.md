@@ -1,5 +1,6 @@
 # ☄️ 💥 ☄️
 # Welcome to Pokedex
+https://amitfikler.github.io/pokedex/
 
 ## Introduction 📌
 Welcome to Pokedex
