@@ -57,7 +57,7 @@ function updateDom(obj) {
         type: <span id="pokeType">${obj.type}</span> <br>
     </div>
     <div id="poke-img">
-        <img src="styles/images/pokeballgif.gif" id="pokeballImg" class="pokemonImg">  
+        <img src="./images/pokeballgif.gif" id="pokeballImg" class="pokemonImg">  
     </div>`
     pokeInfo.innerHTML = pokeDiv; //there is pokeball gif
     changeToPokemon(obj);
