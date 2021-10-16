@@ -38,3 +38,45 @@ function getPokemonObj(data) {
         imageBack: data.sprites.back_default
     }
 }
+
+
+submitBtn.addEventListener("click",async ()=> {
+    let pokemonName = searchPoke.value.toLowerCase();
+    updateDom(await getPokeInfo(pokemonName));
+})
+
+
+
+function updateDom(obj) {
+    const pokeDiv =
+    `<div id="pokeInfo">
+        <span id="pokeId">${obj.id}</span> <br>
+        <span id="pokeName">${obj.name}</span> <br>
+        <span id="pokeHeight">height: ${obj.height}</span>
+        <span id="pokeWeight">weight: ${obj.weight}</span> <br>
+        type: <span id="pokeType">${obj.type}</span> <br>
+    </div>
+    <div id="poke-img">
+        <img src="styles/images/pokeballgif.gif" id="pokeballImg" class="pokemonImg">  
+    </div>`
+    pokeInfo.innerHTML = pokeDiv; //there is pokeball gif
+    changeToPokemon(obj);
+    handleTypeClick(document.querySelectorAll(".types"));
+    handleClickNameEvent();
+}
+
+function handleOverEvent(obj){
+    document.getElementById("pokeImg").addEventListener("mouseenter", (e)=>{
+        e.target.setAttribute("src", obj.imageBack) ;
+    })
+    document.getElementById("pokeImg").addEventListener("mouseleave", (e)=>{
+        e.target.setAttribute("src", obj.imageFront) ;
+    })
+}
+
+function handleClickNameEvent(){
+    document.getElementById("pokeName").addEventListener("click",(e)=>{
+        const name = e.target.innerText;
+        searchPoke.value = name;
+    })
+}
