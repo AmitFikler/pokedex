@@ -66,9 +66,10 @@ function showPokemon(obj) {
 }
 
 function handleOverEvent(obj){
+    if (obj.imageBack !== null) {
     document.getElementById("pokeImg").addEventListener("mouseenter", (e)=>{
         e.target.setAttribute("src", obj.imageBack) ;
-    })
+    })}
     document.getElementById("pokeImg").addEventListener("mouseleave", (e)=>{
         e.target.setAttribute("src", obj.imageFront) ;
     })
