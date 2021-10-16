@@ -80,3 +80,22 @@ function handleClickNameEvent(){
         searchPoke.value = name;
     })
 }
+
+
+// Create a Pokemon array of the same type
+const getPokemonTypes = (data) => {
+    let typesArr = [];
+    for(let type of data.types){
+        typesArr.push(`<span class="types">${type.type.name}</span>`);
+    }
+    return typesArr.join();
+}
+
+// Simulate a Pokemon coming out of a ball
+function changeToPokemon(obj){
+    setTimeout(()=>{
+        document.getElementById("pokeballImg").setAttribute("src",obj.imageFront);
+        document.getElementById("pokeballImg").id = "pokeImg";
+        handleOverEvent(obj);
+    },1000);
+}
