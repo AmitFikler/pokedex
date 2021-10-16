@@ -42,12 +42,12 @@ function getPokemonObj(data) {
 
 submitBtn.addEventListener("click",async ()=> {
     let pokemonName = searchPoke.value.toLowerCase();
-    updateDom(await getPokeInfo(pokemonName));
+    showPokemon(await getPokeInfo(pokemonName));
 })
 
 
 
-function updateDom(obj) {
+function showPokemon(obj) {
     const pokeDiv =
     `<div id="pokeInfo">
         <span id="pokeId">${obj.id}</span> <br>
@@ -60,7 +60,7 @@ function updateDom(obj) {
         <img src="./images/pokeballgif.gif" id="pokeballImg" class="pokemonImg">  
     </div>`
     pokeInfo.innerHTML = pokeDiv; //there is pokeball gif
-    changeToPokemon(obj);
+    changeFromPokeballToPoke(obj);
     handleTypeClick(document.querySelectorAll(".types"));
     handleClickNameEvent();
 }
@@ -92,7 +92,7 @@ const getPokemonTypes = (data) => {
 }
 
 // Simulate a Pokemon coming out of a ball
-function changeToPokemon(obj){
+function changeFromPokeballToPoke(obj){
     setTimeout(()=>{
         document.getElementById("pokeballImg").setAttribute("src",obj.imageFront);
         document.getElementById("pokeballImg").id = "pokeImg";
@@ -142,7 +142,7 @@ function makeSelectEl(type){
 function getValuefromForm(){
     const pokeSelect = document.getElementById("poke-select");
     pokeSelect.addEventListener("change",async () => {
-            updateDom(await getPokeInfo(pokeSelect.value));
+            showPokemon(await getPokeInfo(pokeSelect.value));
             searchPoke.value = pokeSelect.value;
         })
 }
@@ -151,22 +151,22 @@ function getValuefromForm(){
 document.getElementById("upArrow").addEventListener("click",async()=>{
     if(document.getElementById("pokeId") === null || searchPoke.value == 898 || 
     searchPoke.value === "calyrex"){
-        updateDom(await getPokeInfo(1));
+        showPokemon(await getPokeInfo(1));
         searchPoke.value = 1;
     } else{
         let newPokemonId = Number(document.getElementById("pokeId").textContent) +1;
         searchPoke.value = newPokemonId;
-        updateDom(await getPokeInfo(newPokemonId));
+        showPokemon(await getPokeInfo(newPokemonId));
     }
 });
 
 document.getElementById("downArrow").addEventListener("click",async()=>{
-    if(searchPoke.value == 1 || searchPoke.value === "bulbasaur"){
-        updateDom(await getPokeInfo(898));
+    if(searchPoke.value == 1 || searchPoke.value === "bulbasaur" || document.getElementById("pokeId") === null ){
+        showPokemon(await getPokeInfo(898));
         searchPoke.value = 898;
     } else {
         let newPokemonId = Number(document.getElementById("pokeId").textContent) -1;
         searchPoke.value = newPokemonId;
-        updateDom(await getPokeInfo(newPokemonId));
+        showPokemon(await getPokeInfo(newPokemonId));
     }
 });
