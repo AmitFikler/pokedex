@@ -146,3 +146,27 @@ function getValuefromForm(){
             searchPoke.value = pokeSelect.value;
         })
 }
+
+// switching between Pokemon with up and down arrows
+document.getElementById("upArrow").addEventListener("click",async()=>{
+    if(document.getElementById("pokeId") === null || searchPoke.value == 898 || 
+    searchPoke.value === "calyrex"){
+        updateDom(await getPokeInfo(1));
+        searchPoke.value = 1;
+    } else{
+        let newPokemonId = Number(document.getElementById("pokeId").textContent) +1;
+        searchPoke.value = newPokemonId;
+        updateDom(await getPokeInfo(newPokemonId));
+    }
+});
+
+document.getElementById("downArrow").addEventListener("click",async()=>{
+    if(searchPoke.value == 1 || searchPoke.value === "bulbasaur"){
+        updateDom(await getPokeInfo(898));
+        searchPoke.value = 898;
+    } else {
+        let newPokemonId = Number(document.getElementById("pokeId").textContent) -1;
+        searchPoke.value = newPokemonId;
+        updateDom(await getPokeInfo(newPokemonId));
+    }
+});
