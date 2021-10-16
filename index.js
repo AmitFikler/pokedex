@@ -99,3 +99,50 @@ function changeToPokemon(obj){
         handleOverEvent(obj);
     },1000);
 }
+
+
+// Create a drop down list
+
+function handleTypeClick(obj) {
+    obj.forEach(type =>{
+        type.addEventListener("click",async (e) =>{
+            const typ = e.target.innerText;
+            makeSelectForm(typ,await getTypes(typ));       
+        })
+    })
+}
+
+function makeSelectForm(type,arr){
+    if (document.getElementById("poke-select") !== null){
+        document.getElementById("poke-select").remove();
+    }
+    selectForm = makeSelectEl(type);
+    makeAOption(selectForm, `${type} pokemons`);
+    arr.forEach(pokemon => {
+        makeAOption(selectForm, pokemon);
+    })
+    document.querySelector("body").appendChild(selectForm);
+    getValuefromForm();
+}
+
+function makeAOption(form,name){
+    let pokeOption = document.createElement("option")
+    pokeOption.setAttribute("value",name)
+    pokeOption.textContent = name
+    form.appendChild(pokeOption)
+}
+
+function makeSelectEl(type){
+    let selectForm = document.createElement("select");
+    selectForm.setAttribute("name", type);
+    selectForm.setAttribute("id","poke-select");
+    return selectForm;
+}
+
+function getValuefromForm(){
+    const pokeSelect = document.getElementById("poke-select");
+    pokeSelect.addEventListener("change",async () => {
+            updateDom(await getPokeInfo(pokeSelect.value));
+            searchPoke.value = pokeSelect.value;
+        })
+}
