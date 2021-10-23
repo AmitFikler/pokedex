@@ -4,8 +4,7 @@ const router = express.Router()
 
 router.post("/",(req,res)=>{
     const username = req.header("username")
-    console.log(username)
-    res.send({username: username})
+    return res.json({username: username})
 })
 
 module.exports = router

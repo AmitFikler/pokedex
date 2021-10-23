@@ -4,44 +4,54 @@ const Pokedex = require('pokedex-promise-v2');
 const P = new Pokedex();
 const fs = require("fs");
 
-
 // http://localhost:8080/pokemon/get/eevee
-router.get('/get/:id', (req,res)=>{
+router.get('/get/:id', (req,res,next)=>{
     const id = req.params.id
-    // console.log(req.header("username"))
     P.getPokemonByName(id, function(response, error) { // with callback
         if(!error) {
             res.send(getPokemonObj(response))
         } else {
-            console.log(error)
+            next({status:404, message: {error: "not found pokemons"}})
         }
     })
 })
 // http://localhost:8080/pokemon/query?name=eevee
-router.get("/query", (req,res)=>{
+router.get("/query", (req,res,next)=>{
     const pokemonName = req.query.name
     P.getPokemonByName(pokemonName, function(response, error) { // with callback
         if(!error) {
             res.send(getPokemonObj(response))
         } else {
-            console.log(error)
+            next({status:404, message: {error: "not found pokemons"}})
         }
     })
 })
 
 
-router.put('/catch/:id', (req,res)=>{
+router.put('/catch/:id', (req,response,next)=>{
     const username = req.header('username')
     const pokemonId = req.params.id
-    handleCatch(username,pokemonId)
-    res.send("hey")
+    fs.readdir("./users", (err,res)=>{
+        if(err){
+            console.log(err)
+            return
+        }
+        if (!res.includes(username)){
+            fs.mkdirSync(`./users/${username}`)
+        }
+        createPokemonJson(pokemonId,`./users/${username}`,next,response)
+    })
 })
 
-router.delete('/release/:id',(req,res)=>{
+router.delete('/release/:id',(req,res,next)=>{
     const username = req.header('username')
     const pokemonId = req.params.id
-    handleDelete(username,pokemonId)
-    res.send("deleted")
+    try {
+        handleDelete(username,pokemonId)
+        res.send("deleted")
+    } catch (error) {
+        next({status:403, message: {error: "releasing an uncaught pokemon, or catching an already caught pokemon"}})
+    }
 })
 
 
@@ -81,23 +91,7 @@ const getPokemonAbilities = (data) => {
     return abilitiesArr;
 }
 
-
-function handleCatch(user,id){
-    fs.readdir("./users", (err,res)=>{
-        if(err){
-            console.log(err)
-            return
-        }
-        if (!res.includes(user)){
-            fs.mkdirSync(`./users/${user}`)
-            createPokemonJson(id,`./users/${user}`)
-            return
-        }
-        createPokemonJson(id,`./users/${user}`)
-    })
-}
-
-function createPokemonJson(id,userDir){
+function createPokemonJson(id,userDir,next,response){
     fs.readdir(userDir,async (err,res)=>{
         if(err){
             console.error(err);
@@ -106,10 +100,10 @@ function createPokemonJson(id,userDir){
         if(!res.includes(`${id}.json`)){
             const obj = await pokemonById(id)
             .then((res)=>res)
-            console.log(obj)
             fs.writeFileSync(`${userDir}/${id}.json`,JSON.stringify(obj))
-        } else{
-            console.log('pokemon already catch')
+            response.send("catch!")
+        } else {
+            next({status:403, message: {error: "releasing an uncaught pokemon, or catching an already caught pokemon"}})
         }
     })
 }
@@ -127,18 +121,12 @@ function pokemonById(id){
 }
 
 function handleDelete(user,id){
-    fs.readdir(`./users/${user}`,(err,res)=>{
-        if(err){
-            console.error(err);
-            return
-        }
-        if (res.includes(`${id}.json`)){
-            fs.unlinkSync(`./users/${user}/${id}.json`)
+    let dir = fs.readdirSync(`./users/${user}`)
+        if (dir.includes(`${id}.json`)){
+            fs.unlink(`./users/${user}/${id}.json`)
         } else{
-            console.log("you cant release pokemon you dont catch")
+            throw Error("you cant release pokemon you didnt catch")
         }
-    })
-
 }
 
 function handleGetPokemon(user){ 
