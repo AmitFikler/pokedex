@@ -3,6 +3,8 @@ const router = express.Router()
 const Pokedex = require('pokedex-promise-v2');
 const P = new Pokedex();
 const fs = require("fs");
+const { notStrictEqual } = require("assert");
+const { json } = require("express");
 
 // http://localhost:8080/pokemon/get/eevee
 router.get('/get/:id', (req,res,next)=>{
@@ -31,17 +33,30 @@ router.get("/query", (req,res,next)=>{
 router.put('/catch/:id', (req,response,next)=>{
     const username = req.header('username')
     const pokemonId = req.params.id
-    fs.readdir("./users", (err,res)=>{
+    fs.readdir("./users", async (err,res)=>{
         if(err){
             console.log(err)
             return
         }
         if (!res.includes(username)){
             fs.mkdirSync(`./users/${username}`)
+            fs.writeFileSync((`./users/${username}/${pokemonId}.json`), JSON.stringify(getPokemonObj(await getPokemonData(pokemonId))))
+            response.send("Catch!")
         }
-        createPokemonJson(pokemonId,`./users/${username}`,next,response)
+        if (fs.readdirSync(`./users/${username}`).includes(`${pokemonId}.json`)){
+            next({status:403, message: {error: "releasing an uncaught pokemon, or catching an already caught pokemon"}})
+        } else{
+            fs.writeFileSync((`./users/${username}/${pokemonId}.json`), JSON.stringify(getPokemonObj(await getPokemonData(pokemonId))))
+            response.send("Catch!")
+        }
     })
 })
+
+async function getPokemonData(id){
+    let data = await P.getPokemonByName(id)
+    return data
+    
+}
 
 router.delete('/release/:id',(req,res,next)=>{
     const username = req.header('username')
@@ -91,43 +106,16 @@ const getPokemonAbilities = (data) => {
     return abilitiesArr;
 }
 
-function createPokemonJson(id,userDir,next,response){
-    fs.readdir(userDir,async (err,res)=>{
-        if(err){
-            console.error(err);
-            return;
-        }
-        if(!res.includes(`${id}.json`)){
-            const obj = await pokemonById(id)
-            .then((res)=>res)
-            fs.writeFileSync(`${userDir}/${id}.json`,JSON.stringify(obj))
-            response.send("catch!")
-        } else {
-            next({status:403, message: {error: "releasing an uncaught pokemon, or catching an already caught pokemon"}})
-        }
-    })
-}
-function pokemonById(id){
-    return new Promise((resolve,reject) =>{
-        resolve(
-            P.getPokemonByName(id)
-            .then((poke)=>{
-                const pokeObject = getPokemonObj(poke)
-                return pokeObject
-            })
-            .catch((err)=> console.error(err))
-        )
-    })
-}
 
 function handleDelete(user,id){
     let dir = fs.readdirSync(`./users/${user}`)
         if (dir.includes(`${id}.json`)){
-            fs.unlink(`./users/${user}/${id}.json`)
+            fs.unlinkSync(`./users/${user}/${id}.json`)
         } else{
             throw Error("you cant release pokemon you didnt catch")
         }
 }
+
 
 function handleGetPokemon(user){ 
     let pokemomarr = []
@@ -138,6 +126,17 @@ function handleGetPokemon(user){
         }
         return pokemomarr
 }
+
+router.get("/list",(req,res)=>{
+    username = req.header("username")
+    let idList = []
+    let userDir = fs.readdirSync(`./users/${username}`)
+    for (let file of userDir){
+        let parsrFile = JSON.parse(fs.readFileSync(`./users/${username}/${file}`,"utf8"))
+        idList.push(parsrFile.id)
+    }
+    res.send(idList)
+})
 
 
 
