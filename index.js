@@ -8,7 +8,7 @@ const pokeInfo = document.getElementById("pokemonInfo");
 // async functions 
 async function getPokeInfo(pokemonName) {
     try {
-        const response = await axios.get(`${pokemonUrl}${pokemonName}`);
+        const response = await axios.get(`http://localhost:8080/pokemon/get/${pokemonName}`);
         return getPokemonObj(response.data);
     } catch (error) {
         alert("the pockemon doesnt exist!");
