@@ -52,8 +52,11 @@ async function getPokeInfo(pokemonName) {
             return response.data
         }
     } catch (error) {
-        alert(error);
-        return;
+        if(usernameInput.value.length > 0){
+            alartError("There is no such Pokemon")
+        } else {
+            alartError("You must enter a username")
+        }
     }
 }
 
@@ -87,16 +90,15 @@ function showPokemon(obj) {
     <div id="poke-img">
         <img src="./images/pokeballgif.gif" id="pokeballImg" class="pokemonImg">  
     </div>
-    <div>
-        <button id = "catch-btn">Catch</button>
-        <button id= "release-btn" >release</button>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <button class="btn btn-success" id="catch-btn">Catch</button>
+        <button class="btn btn-danger" id="release-btn" >release</button>
     </div>
     `
     pokeInfo.innerHTML = pokeDiv; //there is pokeball gif
     changeFromPokeballToPoke(obj);
     handleTypeClick(document.querySelectorAll(".types"));
     handleClickNameEvent();
-    console.log(document.getElementById("pokeId").innerText)
     document.getElementById("catch-btn").addEventListener("click",()=>{
         catchPokemon(document.getElementById("pokeId").innerText,obj)
     })
@@ -111,10 +113,25 @@ async function catchPokemon(pokemonId,obj){
         const response = await axios.put(`http://localhost:8080/pokemon/catch/${pokemonId}`,"",
         {headers:  {username: username}})
         saveCatch(obj)
-        console.log(response)
+        console.log(response.data)
     } catch (error) {
-        console.error(error)
+        alartError("You've already caught this Pokemon")
     }
+}
+
+function alartError(str){
+    let alart =
+    `
+    <div class="alert alert-danger" role="alert" id="danger">
+    ${str}
+    </div>`
+    let div = document.createElement("div")
+    div.innerHTML = alart
+    document.body.insertBefore(div, usernameInput)
+    setTimeout(()=>{
+        document.getElementById("danger").remove()
+    },2000)
+
 }
 
 function saveCatch(obj){
@@ -146,10 +163,11 @@ async function releasePokemon(Id){
     try {
         const response = await axios.delete(`http://localhost:8080/pokemon/release/${Id}`,
         {headers: {username: username}})
-        console.log(response)
+        console.log(response.data)
         deleteCatch(Id)
     } catch (error) {
-        console.error(error);
+        console.log(error.response)
+        alartError("You can not release a Pokemon that you did not catch")
     }
 }
 
