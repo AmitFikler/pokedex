@@ -81,7 +81,7 @@ function showPokemon(obj) {
         <span id="pokeName">${obj.name}</span> <br>
         <span id="pokeHeight">height: ${obj.height}</span>
         <span id="pokeWeight">weight: ${obj.weight}</span> <br>
-        type: <span id="pokeType">${obj.types}</span> <br>
+        type: <span id="pokeType">${getPokemonTypes(obj.types)}</span> <br>
         abilities: <span id="pokeType">${obj.abilities}</span> <br>
     </div>
     <div id="poke-img">
@@ -133,7 +133,6 @@ function deleteCatch(id){
 
 function handleClickCatch(){
     document.querySelectorAll(".savedPokemons").forEach((poke)=>{
-        console.log(poke)
         poke.addEventListener("click", async ()=>{
             showPokemon(await getPokeInfo(poke.alt));
         })
@@ -173,12 +172,12 @@ function handleClickNameEvent(){
 
 
 // Create a Pokemon array of the same type
-const getPokemonTypes = (data) => {
-    let typesArr = [];
-    for(let type of data.types){
-        typesArr.push(`<span class="types">${type.type.name}</span>`);
+const getPokemonTypes = (typeArr) => {
+    let typesArray = []
+    for(let type of typeArr){
+        typesArray.push(`<span class="types">${type}</span>`);
     }
-    return typesArr.join();
+    return typesArray.join();
 }
 
 // Simulate a Pokemon coming out of a ball
