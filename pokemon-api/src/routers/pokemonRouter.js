@@ -3,8 +3,6 @@ const router = express.Router()
 const Pokedex = require('pokedex-promise-v2');
 const P = new Pokedex();
 const fs = require("fs");
-const { notStrictEqual } = require("assert");
-const { json } = require("express");
 
 // http://localhost:8080/pokemon/get/eevee
 router.get('/get/:id', (req,res,next)=>{
@@ -74,7 +72,6 @@ router.get('/',(req,res)=>{
     const username = req.header('username')
     handleGetPokemon(username)
     res.send("arr")
-
 })
 
 function getPokemonObj(data) {
@@ -133,7 +130,7 @@ router.get("/list",(req,res)=>{
     let userDir = fs.readdirSync(`./users/${username}`)
     for (let file of userDir){
         let parsrFile = JSON.parse(fs.readFileSync(`./users/${username}/${file}`,"utf8"))
-        idList.push(parsrFile.id)
+        idList.push(parsrFile.name)
     }
     res.send(idList)
 })
