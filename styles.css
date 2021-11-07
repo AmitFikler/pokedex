@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap');
+
+body{
+    font-family: 'Chakra Petch', sans-serif;
+    background-image:url('./images/background.png');
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#pokeballImg{
+    top: 70%;
+    left:24%;
+    position: absolute;
+}
+
+.savedPokemons{
+    cursor: pointer;
+}
+
+#catch-pokemons {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(240, 255, 255, 0.13);
+  color: white;
+  text-align: center;
+}
+
+
+#pokeImg {
+    width: 200px;
+    top: 54%;
+    left:20%;
+    position: absolute;
+}
+
+#form {
+    background-color: rgba(255, 0, 0, 0.459);
+    width: 350px;
+    padding: 20px;
+    border: solid black 2px;
+    border-radius: 10px;
+    position: relative;
+    margin:auto;
+    margin-top:30px;
+    color: white;
+}
+
+#pokeInfo {
+    background-color: rgba(255, 255, 255, 0.459);
+    width: 300px;
+    border: solid black 2px;
+    border-radius: 10px;
+    position: absolute;
+    top:30%;
+    left: 70%; 
+}
+
+#pokeInfo #pokeId {
+    position: absolute;
+    top:0;
+    right:4%;
+    font-size: 20px;
+}
+
+#pokeInfo #pokeName {
+    position: absolute;
+    top:1%;
+    left:35%;
+    font-size: 24px;
+}
+
+#pokeInfo .types {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 5px;
+}
+#pokeInfo #pokeWeight {
+    right: 5%;
+    position: absolute;
+}
+
+#pokeInfo #pokeHeight {
+    left: 5%;
+    position: absolute;
+}
+
+#poke-select {
+    background-color: rgba(179, 245, 188, 0.74);
+    border-left: 8px solid rgb(26, 44, 207);
+    border-radius: 5px;
+    position: absolute;
+    top:10%;
+    left: 3%;
+}
+#upArrow {
+    color: white;
+    position: absolute;
+    left: 110%;
+    top:9%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#downArrow {
+    color: white;
+    position: relative;
+    left: 32%;
+    top:15%;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#catchListBtn {
+    font-size: 11px;
+    width: 50px;
+    padding: 3px;
+}

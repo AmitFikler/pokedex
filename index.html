@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <title>PokeDox</title>
+    <link rel="icon" href="./images/Poké_Ball_icon.svg.png" type="image/icon type">
+    <link rel="stylesheet" href="./styles.css">
+    <meta name="description" content="Client-side app illustrating fetch and axios">
+    <meta name="author" content="Denise Case">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/css/mdb.min.css" rel="stylesheet">  
+    <!-- required for sticky footer -->
+</head>
+<body>
+    <input id="username" type="text" placeholder="username">
+    <span><button class="btn btn-warning" id="catchListBtn">catch list</button></span>
+    <div id="form">
+        <h6>search a Pokémon by name or Id(1-898)</h6>
+        <input id="searchPoke" type="text" placeholder="search a Pokémon..."></input>
+        <button id="submitBtn" type="submit">Submit</button>
+        <i id="upArrow" class="fas fa-arrow-circle-up"></i>
+        <i id="downArrow" class="fas fa-arrow-circle-down"></i>
+    </div>
+    <div id ="pokedex">
+        <div id = "pokemonInfo">
+        </div>
+    </div>
+    <div id="catch-pokemons">
+    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>
+ 
+  <!-- add axios with cdn - still no build tools needed -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script src="./index.js"></script>
+</body>
+</html>
